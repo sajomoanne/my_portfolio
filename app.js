@@ -1,40 +1,100 @@
 const portfolioData = {
   profile: {
-    name: "Your Name",
-    bio: "I am a full-stack enthusiast focused on building resilient web applications with thoughtful UX, modern JavaScript architecture, and scalable cloud-ready systems.",
-    github: "https://github.com/your-username",
-    linkedin: "https://www.linkedin.com/in/your-profile",
-    email: "you@example.com"
+    name: "sajomoanne",
+    bio: "I am a guy trying to manage my studies and also turn my ideas into reality, though theyre all in early dev. days",
+    github: "https://github.com/sajomoanne",
+    email: "sajomoanne@gmail.com"
   },
   projects: [
     {
-      title: "Realtime Analytics Dashboard",
-      description: "A high-performance dashboard with live metrics, role-based views, and data exports.",
+      title: "LockIN tool",
+      description: "A tool to plan and get your deep-work sessions done",
       codeUrl: "https://github.com/your-username/project-one"
     },
     {
-      title: "AI Notes Assistant",
-      description: "A productivity web app for summarizing long-form notes and generating action items.",
-      codeUrl: "https://github.com/your-username/project-two"
+      title: "OpenNotebookLMs",
+      description: "discover and share google NotebookLMs",
+      codeUrl: "https://github.com/sajomoanne/OpenNotebookLMs"
     },
     {
-      title: "Developer Hiring Platform",
-      description: "A full-stack recruiting platform with profile matching and interview workflow automation.",
-      codeUrl: "https://github.com/your-username/project-three"
+      title: "BookRecallDemo (repo dont exist YET)",
+      description: "A tool to help you recall stuff from books you've read, or to get knowledge from some good books thru active learning.",
+      codeUrl: "https://sajomoanne.github.io/my_portfolio"
     },
     {
-      title: "Headless Commerce Starter",
-      description: "A modular storefront starter kit with fast SSR pages and flexible payment integration.",
-      codeUrl: "https://github.com/your-username/project-four"
+      title: "My Portfolio",
+      description: "the title is very self-explainatory",
+      codeUrl: "https://sajomoanne.github.io/my_portfolio"
     }
   ],
   ideas: [
-    "Context-aware UI assistant that adapts layouts based on user intent in real time.",
-    "WebGPU-powered in-browser 3D component playground for design systems.",
-    "Offline-first collaboration board with local AI suggestions and delayed sync.",
-    "Edge-rendered experiment platform for instant A/B testing of product ideas."
+    "none, im improving my current projects",
   ]
 };
+
+function easeInOutCubic(progress) {
+  return progress < 0.5
+    ? 4 * progress * progress * progress
+    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+}
+
+function smoothScrollTo(targetY, duration = 700) {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReducedMotion) {
+    window.scrollTo(0, targetY);
+    return;
+  }
+
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  if (Math.abs(distance) < 1) {
+    return;
+  }
+
+  const startTime = performance.now();
+
+  function frame(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeInOutCubic(progress);
+
+    window.scrollTo(0, startY + distance * eased);
+
+    if (progress < 1) {
+      requestAnimationFrame(frame);
+    }
+  }
+
+  requestAnimationFrame(frame);
+}
+
+function initSmoothAnchorScroll() {
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("a[href^='#']");
+    if (!link) {
+      return;
+    }
+
+    const targetSelector = link.getAttribute("href");
+    if (!targetSelector || targetSelector === "#") {
+      return;
+    }
+
+    const target = document.querySelector(targetSelector);
+    if (!target) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const targetY = target.getBoundingClientRect().top + window.scrollY;
+    smoothScrollTo(targetY);
+
+    if (history.pushState) {
+      history.pushState(null, "", targetSelector);
+    }
+  });
+}
 
 function createProjectCard(project, index) {
   return `
@@ -93,4 +153,7 @@ function renderPortfolio() {
   year.textContent = new Date().getFullYear();
 }
 
-document.addEventListener("DOMContentLoaded", renderPortfolio);
+document.addEventListener("DOMContentLoaded", () => {
+  renderPortfolio();
+  initSmoothAnchorScroll();
+});
