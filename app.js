@@ -9,16 +9,16 @@ const portfolioData = {
     {
       title: "LockIN tool",
       description: "A tool to plan and get your deep-work sessions done",
-      projectUrl: "https://sajomoanne.github.io/my_portfolio",
+      projectUrl: "https://sajomoanne.github.io/lockIN/",
       repoUrl: "https://github.com/sajomoanne",
-      imageUrl: "https://placehold.co/1200x675/0f172a/94a3b8?text=LockIN+tool"
+      imageUrl: "./images/lockin.png"
     },
     {
       title: "OpenNotebookLMs",
       description: "discover and share google NotebookLMs",
-      projectUrl: "https://sajomoanne.github.io/my_portfolio",
+      projectUrl: "https://sajomoanne.github.io/OpenNotebookLMs/",
       repoUrl: "https://github.com/sajomoanne/OpenNotebookLMs",
-      imageUrl: "https://placehold.co/1200x675/0f172a/94a3b8?text=OpenNotebookLMs"
+      imageUrl: "./images/opennotebooklms.png"
     },
     {
       title: "BookRecallDemo (repo dont exist YET)",
@@ -32,7 +32,7 @@ const portfolioData = {
       description: "the title is very self-explainatory",
       projectUrl: "https://sajomoanne.github.io/my_portfolio",
       repoUrl: "https://github.com/sajomoanne/my_portfolio",
-      imageUrl: "https://placehold.co/1200x675/0f172a/94a3b8?text=My+Portfolio"
+      imageUrl: "./images/portfolio.png"
     }
   ],
   ideas: [
