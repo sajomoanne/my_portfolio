@@ -9,22 +9,30 @@ const portfolioData = {
     {
       title: "LockIN tool",
       description: "A tool to plan and get your deep-work sessions done",
-      codeUrl: "https://github.com/your-username/project-one"
+      projectUrl: "https://sajomoanne.github.io/my_portfolio",
+      repoUrl: "https://github.com/sajomoanne",
+      imageUrl: "https://placehold.co/1200x675/0f172a/94a3b8?text=LockIN+tool"
     },
     {
       title: "OpenNotebookLMs",
       description: "discover and share google NotebookLMs",
-      codeUrl: "https://github.com/sajomoanne/OpenNotebookLMs"
+      projectUrl: "https://sajomoanne.github.io/my_portfolio",
+      repoUrl: "https://github.com/sajomoanne/OpenNotebookLMs",
+      imageUrl: "https://placehold.co/1200x675/0f172a/94a3b8?text=OpenNotebookLMs"
     },
     {
       title: "BookRecallDemo (repo dont exist YET)",
       description: "A tool to help you recall stuff from books you've read, or to get knowledge from some good books thru active learning.",
-      codeUrl: "https://sajomoanne.github.io/my_portfolio"
+      projectUrl: "https://sajomoanne.github.io/my_portfolio",
+      repoUrl: "https://github.com/sajomoanne?tab=repositories",
+      imageUrl: "https://placehold.co/1200x675/0f172a/94a3b8?text=BookRecallDemo"
     },
     {
       title: "My Portfolio",
       description: "the title is very self-explainatory",
-      codeUrl: "https://sajomoanne.github.io/my_portfolio"
+      projectUrl: "https://sajomoanne.github.io/my_portfolio",
+      repoUrl: "https://github.com/sajomoanne/my_portfolio",
+      imageUrl: "https://placehold.co/1200x675/0f172a/94a3b8?text=My+Portfolio"
     }
   ],
   ideas: [
@@ -96,22 +104,56 @@ function initSmoothAnchorScroll() {
   });
 }
 
+function buildInlinePlaceholder(title) {
+  const safeTitle = title || "Project Preview";
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g)"/>
+  <circle cx="1000" cy="140" r="180" fill="#22c55e" fill-opacity="0.15"/>
+  <circle cx="220" cy="600" r="220" fill="#7dd3fc" fill-opacity="0.12"/>
+  <text x="70" y="590" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="44">${safeTitle}</text>
+</svg>`;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
 function createProjectCard(project, index) {
+  const projectLink = project.projectUrl || project.liveUrl || project.demoUrl || project.url || project.codeUrl || "#";
+  const repoLink = project.repoUrl || project.githubUrl || project.codeUrl || "https://github.com";
+  const imageSrc = project.imageUrl || buildInlinePlaceholder(project.title);
+
   return `
     <article class="project-card rounded-2xl p-4 shadow-card">
-      <div class="project-thumb mb-4 flex aspect-[16/10] items-center justify-center rounded-xl border border-slate-700/70">
-        <span class="text-xs font-medium tracking-[0.16em] text-slate-300 uppercase">Project ${index + 1}</span>
-      </div>
+      <a
+        href="${projectLink}"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Open ${project.title}"
+        class="project-thumb mb-4 block overflow-hidden rounded-xl border border-slate-700/70"
+      >
+        <img
+          src="${imageSrc}"
+          alt="${project.title} preview image"
+          loading="lazy"
+          class="h-full w-full aspect-[16/10] object-cover"
+        />
+      </a>
       <h3 class="text-lg font-semibold text-white">${project.title}</h3>
       <p class="mt-2 text-sm leading-relaxed text-slate-300">${project.description}</p>
       <div class="mt-4 flex flex-wrap items-center gap-2">
         <a
-          href="${project.codeUrl}"
+          href="${repoLink}"
           target="_blank"
           rel="noreferrer"
           class="tag-chip rounded-full px-3 py-1 text-xs font-semibold text-slate-200 transition hover:border-slateGlow hover:text-white"
         >
-          View Code
+          repo
         </a>
       </div>
     </article>
@@ -145,9 +187,17 @@ function renderPortfolio() {
   projectGrid.innerHTML = projects.map(createProjectCard).join("");
   ideasList.innerHTML = ideas.map(createIdeaItem).join("");
 
-  githubLink.href = profile.github;
-  linkedinLink.href = profile.linkedin;
-  emailLink.href = `mailto:${profile.email}`;
+  if (githubLink && profile.github) {
+    githubLink.href = profile.github;
+  }
+
+  if (linkedinLink && profile.linkedin) {
+    linkedinLink.href = profile.linkedin;
+  }
+
+  if (emailLink && profile.email) {
+    emailLink.href = `mailto:${profile.email}`;
+  }
 
   footerName.textContent = profile.name;
   year.textContent = new Date().getFullYear();
